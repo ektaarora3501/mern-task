@@ -89,8 +89,9 @@ Router.post("/login", (req, res) => {
 });
 
 Router.get("/profile", Auth, async (req, res) => {
+  console.log(req.user)
   try {
-    Users.findById(req.body.id, (err, dataa) => {
+    Users.findById(req.user, (err, data) => {
       return res.status(200).json(data);
     });
   } catch (err) {

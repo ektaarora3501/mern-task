@@ -2,13 +2,14 @@ const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
   try {
-    const token = req.header("x-auth-token");
+    let token = req.headers.authorization ;
     if (!token) {
       return res.status(401).json({
         msg: "No Auth token found, access denied",
       });
     }
 
+    token = req.headers.authorization.split(' ')[1];
     const verified = jwt.verify(token, process.env.TOKEN);
 
     if (!verified) {
@@ -21,7 +22,8 @@ const auth = (req, res, next) => {
     req.user = verified.id;
     next();
   } catch (error) {
-    return res.status(500).json({ err });
+    console.log(error)
+    return res.status(500).json({ error });
   }
 };
 
