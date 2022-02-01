@@ -1,8 +1,11 @@
 const Users = require("../model/user.model");
+const ImageSchema = require("../model/image.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Router = require("express").Router();
 const Auth = require("./../middleware/auth");
+const uploadImage = require("../middleware/upload");
+const fs = require("fs");
 
 Router.post("/register", async (req, res) => {
   try {
@@ -89,7 +92,7 @@ Router.post("/login", (req, res) => {
 });
 
 Router.get("/profile", Auth, async (req, res) => {
-  console.log(req.user)
+  console.log(req.user);
   try {
     Users.findById(req.user, (err, data) => {
       return res.status(200).json(data);
@@ -98,5 +101,43 @@ Router.get("/profile", Auth, async (req, res) => {
     return res.status(500).json({ err });
   }
 });
+
+Router.post(
+  "/uploadImage",
+  Auth,
+  uploadImage.single("myImage"),
+  async (req, res) => {
+    console.log(req.file, req.user);
+    var img = fs.readFileSync(req.file.path);
+    var encode_img = img.toString("base64");
+    var final_img = {
+      contentType: req.file.mimetype,
+      data: Buffer.from(encode_img, "base64"),
+    };
+    const newImage = new ImageSchema({
+      name: req.file.originalname,
+      desc: "none",
+      img: final_img,
+      user_id: req.user,
+    });
+
+    newImage.save((err, data) => {
+      if (err) {
+        return res.status(500).json("Error in uploading files");
+      } else {
+        console.log(data);
+        return res.status(200).json("uploaded successfuly");
+      }
+    });
+    // ImageSchema.create(final_img, function (err, result) {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     console.log("Saved To database");
+    //     return res.status(200).json("Saved to database");
+    //   }
+    // });
+  }
+);
 
 module.exports = Router;
