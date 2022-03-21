@@ -15,7 +15,8 @@ app.use(cors());
 // mongoose.set("useUnifiedTopology", true);
 
 mongoose.connect(
-  "mongodb+srv://admin:admin123@apptask.qdvlc.mongodb.net/userData?retryWrites=true&w=majority",
+  "mongodb://ekta:ekta123@167.71.228.240:27017/?authSource=admin"
+,
   (err, db) => {
     console.log("Db connected");
   }
