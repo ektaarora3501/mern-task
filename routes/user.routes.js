@@ -140,4 +140,8 @@ Router.post(
   }
 );
 
+Router.get("/test", async (req, res) => {
+  return res.status(200).send("hello world");
+});
+
 module.exports = Router;

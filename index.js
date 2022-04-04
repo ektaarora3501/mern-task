@@ -15,8 +15,7 @@ app.use(cors());
 // mongoose.set("useUnifiedTopology", true);
 
 mongoose.connect(
-  "mongodb://ekta:ekta123@167.71.228.240:27017/?authSource=admin"
-,
+  "mongodb://ekta:ekta123@167.71.228.240:27017/?authSource=admin",
   (err, db) => {
     console.log("Db connected");
   }
@@ -26,7 +25,8 @@ app.use("/users", UserRoutes);
 
 const port = 5050 || process.env.PORT;
 
-
 app.listen(port, () => {
   console.log(`Server is started on port :${port}`);
 });
+
+module.exports = app;
