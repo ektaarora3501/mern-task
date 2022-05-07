@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const UserRoutes = require("./routes/user.routes");
+const TestRoutes = require("./routes/test.routes");
 require("dotenv").config();
 
 const app = express();
@@ -15,13 +16,14 @@ app.use(cors());
 // mongoose.set("useUnifiedTopology", true);
 
 mongoose.connect(
-  "mongodb://ekta:ekta123@167.71.228.240:27017/?authSource=admin",
+  "mongodb+srv://admin:admin123@apptask.qdvlc.mongodb.net/userData?retryWrites=true&w=majority",
   (err, db) => {
     console.log("Db connected");
   }
 );
 
 app.use("/users", UserRoutes);
+app.use("/test", TestRoutes);
 
 const port = 5050 || process.env.PORT;
 
